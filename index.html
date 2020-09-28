@@ -19,13 +19,16 @@
     <script src="js/jquery.dataTables.min.js"></script>
     <script src="js/dataTables.bootstrap4.min.js"></script>
 
-
-
     <style>
-        .number{
+        .number {
             text-align: right;
         }
+
+        .middle {
+            text-align: center;
+        }
     </style>
+
 </head>
 
 <body>
@@ -33,7 +36,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
         <div class="container">
-            <a class="navbar-brand" href="#">Monitoring</a>
+            <a class="navbar-brand" href="#">GBA-Webservices Monitoring</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,7 +51,7 @@
                         <a class="nav-link" href="#">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+                        <a class="nav-link" href="https://stats.uptimerobot.com/nNwk9IGgjk">Uptime</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Contact</a>
@@ -61,21 +64,22 @@
     <!-- Page Content -->
     <div class="container">
         <div class="row">
-            <div class="col-lg-12 text-center">
+            <div class="col-lg-12 text-center"><br>
                 <!--        <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>-->
-                <p class="lead">Complete with pre-defined file paths and responsive navigation!</p>
-                <table id="example" class="text-left table table-hover table-striped table-sm">
+                <p class="lead">Webservices overview, uptime ratio and response times average</p>
+                <table id="example" class="text-left table table-hover table-striped table-sm order-column">
                     <thead>
                         <tr>
-                            <th scope="col">Service</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Host</th>
-                            <th scope="col">REST</th>
-                            <th scope="col">WMS</th>
-                            <th scope="col">WFS</th>
-                            <th scope="col">CSW</th>
-                            <th scope="col">Sparql</th>
-                            <th scope="col">OAI</th>
+                            <th scope="col">Web service</th>
+                            <th scope="col">Server</th>
+                            <th scope="col">Software</th>
+                            <th class="middle" scope="col">REST</th>
+                            <th class="middle" scope="col">WMS</th>
+                            <th class="middle" scope="col">WFS</th>
+                            <th class="middle" scope="col">CSW</th>
+                            <th class="middle" scope="col">Sparql</th>
+                            <th class="middle" scope="col">OAI</th>
+                            <th class="middle" scope="col">Query</th>
                             <th scope="col">uptime</th>
                             <th class="number" scope="col">[ms]</th>
                         </tr>
@@ -86,10 +90,5 @@
             </div>
         </div>
     </div>
-
-    <div id="log">
-        <h3>Content:</h3>
-    </div>
-
 
 </body></html>

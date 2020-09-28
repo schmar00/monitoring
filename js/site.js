@@ -1,3 +1,9 @@
+/*$('#example').DataTable({
+    "paging": false,
+    "ordering": false,
+    "info": false
+});*/
+
 //list ArcGIS services
 
 class Service {
@@ -23,16 +29,17 @@ class Server {
 }
 
 const regServices = [
-    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'resource', 1, 0, 0, 0, 1),
-    new Service('Thesaurus GeologicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'resource', 1, 0, 0, 0, 1),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'resource', 1, 0, 0, 0, 1),
-    /*new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'resource'),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'resource'),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'resource'),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'resource'),*/
-    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'geonetwork', 1, 0, 0, 1),
-    new Service('Tethys', 'Repository', 'https://tethys.at/oai', 'tethys', 0, 0, 0, 0, 0, 1)
-
+    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'PoolParty', 1, 0, 0, 0, 1),
+    new Service('Thesaurus GeologicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'PoolParty', 1, 0, 0, 0, 1),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1),
+    /*new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty'),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty'),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty'),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty'),*/
+    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1),
+    new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 0, 0, 0, 0, 0, 1),
+    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'Axiell', 1),
+    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'MICKA', 1, 0, 0, 1)
 ];
 
 //monitor ESRI
@@ -50,7 +57,7 @@ const regServices = [
 function getServices(response, server) {
     let b = [];
     switch (server) {
-        case 'arcgis':
+        case 'ArcGIS':
             for (item of response.replace(/(\r\n|\n|\r|https:\/\/gisgba.geologie.ac.at\/arcgis\/rest\/services\/)/gm, '').split('<loc>')) {
                 let c = item.split('</loc>')[0].split('/');
                 let d = 'https://gisgba.geologie.ac.at/arcgis/rest/services/' + item.split('<')[0];
@@ -63,7 +70,7 @@ function getServices(response, server) {
             b.shift();
             return b;
             break;
-        case 'geoserver':
+        case 'OSGeo':
             for (item of response.split('http').filter(s => s.includes('/ows?')).map(a => 'http' + a.split('/ows?')[0] + '/ows').filter((v, i, a) => a.indexOf(v) === i)) {
                 b.push(new Service(item.split('/')[4], 'Geoserver', item, server, 1, 1));
             }
@@ -73,8 +80,8 @@ function getServices(response, server) {
 
 
 let serverList = [
-    new Server('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap', 'arcgis'),
-    new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage?4&filter=false', 'geoserver')
+    new Server('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap', 'ArcGIS'),
+    new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage?4&filter=false', 'OSGeo')
 ];
 
 Promise.all(serverList.map(s =>
@@ -121,12 +128,14 @@ Promise.all(serverList.map(s =>
 
                         //console.log(allServices); //WFS->WMS->REST->without
                         let lookUpWFS = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('service=wfs'));
-                        let lookUpWMS = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('service=wms'));
+                        let lookUpWMS = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
                         let lookUpREST = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
                         //console.log(lookUpWMS);
 
+                        let queryLink = '';
+
                         for (let i of allServices) {
-                            let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows',''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/','/'))));
+                            let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
 
                             if (lookUpWFS.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
                                 i.wfs = 1;
@@ -144,17 +153,33 @@ Promise.all(serverList.map(s =>
 
                             //console.log(lookUp);
                             let uptimeStatus = '<i class="fas fa-circle" style="color:lightgrey;"></i>';
+                            let unknownStatus = '<i class="fas fa-question-circle" style="color:lightgrey;"></i>';
                             let responseTime = '';
                             let uptime = '';
 
                             let restStatus = '';
+                            let wmsStatus = '';
+                            let wfsStatus = '';
                             if (i.rest == 1) {
                                 restStatus = uptimeStatus;
+
                             }
 
+                            let wmsTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
+                            if (wmsTyp.includes(i.typ)) {
+                                wmsStatus = unknownStatus;
+                            }
+
+                            let wfsServices = ['IRIS_Lagerstaetten_Reviere (projekte_iris)', 'GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)'];
+                            if (wfsServices.includes(i.name)) {
+                                wfsStatus = uptimeStatus;
+                                i.wfs = 1;
+                            }
+                            queryLink = '';
                             if (lookUp.length > 0) {
                                 responseTime = parseInt(lookUp[0].average_response_time);
                                 uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
+                                queryLink = `<a href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
                                 switch (lookUp[0].status) {
                                     case 2:
@@ -182,28 +207,27 @@ Promise.all(serverList.map(s =>
 
                             }
                             $('#monitors').append(`<tr>
-                                        <td>${i.name}&nbsp;&nbsp;&nbsp;<a href="${i.url}"><i class="fas fa-external-link-alt fa-xs"></i></a></td>
+                                        <td><a title="website" href="${i.url}"><i class="fas fa-server"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
                                         <td>${i.typ}</td>
                                         <td>${i.server}</td>
-                                        <td>${restStatus}</td>
-                                        <td>${(i.wms==1)?uptimeStatus:''}</td>
-                                        <td>${(i.wfs==1)?uptimeStatus:''}</td>
-                                        <td>${(i.csw==1)?uptimeStatus:''}</td>
-                                        <td>${(i.sparql==1)?uptimeStatus:''}</td>
-                                        <td>${(i.oai==1)?uptimeStatus:''}</td>
+                                        <td class="middle">${restStatus}</td>
+                                        <td class="middle">${(i.wms==1)?uptimeStatus:wmsStatus}</td>
+                                        <td class="middle">${(i.wfs==1)?uptimeStatus:wfsStatus}</td>
+                                        <td class="middle">${(i.csw==1)?uptimeStatus:''}</td>
+                                        <td class="middle">${(i.sparql==1)?uptimeStatus:''}</td>
+                                        <td class="middle">${(i.oai==1)?uptimeStatus:''}</td>
+                                        <td class="middle">${queryLink}</td>
                                         <td class="number">${uptime}</td>
                                         <td class="number">${responseTime}</td>
                                     </tr>`);
-
-
-
                         }
 
                         //https://datatables.net/examples/basic_init/
 
                         $('#example').DataTable({
                             "order": [[1, "asc"]], //nach Namen sortiert
-                            //"lengthMenu": [25, 50, 100]
+                            //"paging": false
+                            "lengthMenu": [25, 50, 100]
                         });
 
 
