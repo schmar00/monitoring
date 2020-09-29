@@ -45,18 +45,6 @@ const regServices = [
     new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1)
 ];
 
-//monitor ESRI
-//http://gisgba.geologie.ac.at/arcgis/services/projekte_onegeology/1GE_GBA_500k_Surface_Geology/MapServer/WMSServer?request=GetCapabilities&service=WMS
-
-//https://gisgba.geologie.ac.at/arcgis/rest/services/image/AT_GBA_GK50/ImageServer/exportImage?bbox=900000,300000,5000,570385&size=600&f=image
-
-//https://gisgba.geologie.ac.at/arcgis/services/image/AT_GBA_GEBIETSKARTEN/ImageServer/WMSServer?service=WMS&version=1.1.0&request=GetMap&layers=0&bbox=12,47,17.5,49&width=768&height=330&srs=EPSG%3A4326&styles=default&format=image%2Fpng
-
-//https://gis.geologie.ac.at/geoserver/mr_lagerst/wms?service=WMS&version=1.1.0&request=GetMap&layers=mr_lagerst%3Amr_lagerst&bbox=9.53650665283203%2C46.3820953369141%2C17.061107635498%2C49.0268630981445&width=768&height=330&srs=EPSG%3A4258&format=image%2Fpng
-
-//harvest WMS
-//https://gisgba.geologie.ac.at/arcgis/rest/services/projekte_onegeology/1GE_GBA_500k_Surface_Geology/MapServer
-
 function getServices(response, server) {
     let b = [];
     switch (server) {
@@ -186,13 +174,13 @@ Promise.all(serverList.map(s =>
 
                                 switch (lookUp[0].status) {
                                     case 2:
-                                        if (responseTime < 1500 && uptime > 99) {
+                                        if (responseTime < 2000 && uptime > 99) {
                                             uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[1]}</a>`;
                                         } else {
                                             uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[2]}</a>`;
                                         }
 
-                                        if (i.wms == 1 && responseTime < 3000 && uptime > 99) {
+                                        if (i.wms == 1 && i.typ !== 'Geoserver' && responseTime < 4000 && uptime > 99) {
                                             restStatus = `<a href="${utrLink+lookUp[0].id}">${face[1]}</a>`
                                         } else {
                                             restStatus = uptimeStatus;
