@@ -41,7 +41,8 @@ const regServices = [
     new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1),
     new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 0, 0, 0, 0, 0, 1),
     new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1),
-    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1)
+    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1),
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1)
 ];
 
 //monitor ESRI
