@@ -1,9 +1,3 @@
-/*$('#example').DataTable({
-    "paging": false,
-    "ordering": false,
-    "info": false
-});*/
-
 //list ArcGIS services
 
 class Service {
@@ -107,7 +101,7 @@ Promise.all(serverList.map(s =>
                     })
                     .then(data2 => {
                         monitorsList = monitorsList.concat(data2.monitors);
-                        console.log(monitorsList);
+                        //console.log(monitorsList);
 
                         let face = {
                             1: '<i class="fas fa-smile" style="color:#27ae60;"></i>',
@@ -138,9 +132,6 @@ Promise.all(serverList.map(s =>
                             if (lookUpREST.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
                                 i.rest = 1;
                             }
-
-                            //https://gisgba.geologie.ac.at/ArcGIS/rest/services/AT_GBA_BOHRKERNE/MapServer?f=jsapi
-                            //https://gisgba.geologie.ac.at/arcgis/rest/services/AT_GBA_BOHRKERNE/MapServer
 
                             //console.log(lookUp);
                             let uptimeStatus = '<i class="fas fa-circle" style="color:lightgrey;"></i>';
