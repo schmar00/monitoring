@@ -23,20 +23,23 @@ class Server {
 }
 
 const regServices = [
-    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus GeologicUnit', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus GeologicTimeScale', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicTimeScale', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus TectonicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/tectonicunit', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus Mineral', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/mineral', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('Thesaurus Mineral Resources', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/minres', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('GeoERA Keywords (GBA)', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1),
-    new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1),
-    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1),
-    new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 0, 0, 0, 0, 0, 1),
-    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1),
-    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1)
+    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus GeologicUnit', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus GeologicTimeScale', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicTimeScale', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus TectonicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/tectonicunit', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus Mineral', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/mineral', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('Thesaurus Mineral Resources', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/minres', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('GeoERA Keywords (GBA)', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/keyword', 'PoolParty', 1, 0, 0, 0, 1, 0),
+    new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1, 0),
+    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 0, 0),
+    new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1),
+    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 0),
+    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 0, 0),
+    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/catalog.search', 'OSGeo', 1, 0, 0, 0, 0, 0),
+    new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 0),
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0),
+    new Service('test-html', 'Website', 'http://www.geolba.net/abc.html', 'alfa', 1, 0, 0, 0, 0, 0, 0)
 ];
 
 function getServices(response, server) {
@@ -47,9 +50,9 @@ function getServices(response, server) {
                 let c = item.split('</loc>')[0].split('/');
                 let d = 'https://gisgba.geologie.ac.at/arcgis/rest/services/' + item.split('<')[0];
                 if (c.length > 2) {
-                    b.push(new Service(c[1] + ' (' + c[0] + ')', c[2], d, server, 1));
+                    b.push(new Service(c[1] + ' (' + c[0] + ')', c[2], d, server, 1, 0, 0, 0, 0, 0, 0));
                 } else {
-                    b.push(new Service(c[0], c[1], d, server, 1));
+                    b.push(new Service(c[0], c[1], d, server, 1, 0, 0, 0, 0, 0, 0));
                 }
             }
             b.shift();
@@ -57,7 +60,7 @@ function getServices(response, server) {
             break;
         case 'OSGeo':
             for (item of response.split('http').filter(s => s.includes('/ows?')).map(a => 'http' + a.split('/ows?')[0] + '/ows').filter((v, i, a) => a.indexOf(v) === i)) {
-                b.push(new Service(item.split('/')[4], 'Geoserver', item, server, 1, 1));
+                b.push(new Service(item.split('/')[4], 'Geoserver', item, server, 1, 1, 0, 0, 0, 0, 0));
             }
             return b;
     }
@@ -103,105 +106,96 @@ Promise.all(serverList.map(s =>
                         monitorsList = monitorsList.concat(data2.monitors);
                         //console.log(monitorsList);
 
-                        let face = {
-                            1: '<i class="fas fa-smile" style="color:#27ae60;"></i>',
-                            2: '<i class="fas fa-meh" style="color:#FFC300;"></i>',
-                            3: '<i class="fas fa-angry" style="color:#e74c3c;"></i>'
+                        let smiley = {
+                            0: '<span class="hidden">7</span>', //empty
+                            1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
+                            2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
+                            3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
+                            4: '<span class="hidden">4</span><i class="fas fa-angry" style="color:#e74c3c;"></i>', //down
+                            5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:lightgrey;"></i>' //possible
                         };
 
                         let utrLink = 'https://stats.uptimerobot.com/nNwk9IGgjk/';
 
-                        //console.log(allServices); //WFS->WMS->REST->without
-                        let lookUpWFS = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('service=wfs'));
-                        let lookUpWMS = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
-                        let lookUpREST = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
-                        //console.log(lookUpWMS);
+                        console.log('allServices', allServices);
+
+                        let WMSList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
+                        let RESTList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
 
                         let queryLink = '';
 
+                        let wfsServices = ['IRIS_Lagerstaetten_Reviere (projekte_iris)', 'GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)'];
+                        let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
+
+                        let responseTime = '';
+                        let uptime = '';
+                        let restBonus = 0;
+
                         for (let i of allServices) {
+
                             let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
 
-                            if (lookUpWFS.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
-                                i.wfs = 1;
-                                i.wms = 1;
-                            }
-                            if (lookUpWMS.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
-                                i.wms = 1;
-                            }
-                            if (lookUpREST.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
-                                i.rest = 1;
-                            }
+                            console.log('lookUp', lookUp);
+                            monitorLink = '';
+                            addStatus = 1;
+                            restBonus = 0;
+                            responseTime = '-';
+                            uptime = '-';
 
-                            //console.log(lookUp);
-                            let uptimeStatus = '<i class="fas fa-circle" style="color:lightgrey;"></i>';
-                            let unknownStatus = '<i class="fas fa-question-circle" style="color:lightgrey;"></i>';
-                            let responseTime = '';
-                            let uptime = '';
-
-                            let restStatus = '';
-                            let wmsStatus = '';
-                            let wfsStatus = '';
-                            if (i.rest == 1) {
-                                restStatus = uptimeStatus;
-
-                            }
-
-                            let wmsTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
-                            if (wmsTyp.includes(i.typ)) {
-                                wmsStatus = unknownStatus;
-                            }
-
-                            let wfsServices = ['IRIS_Lagerstaetten_Reviere (projekte_iris)', 'GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)'];
-                            if (wfsServices.includes(i.name)) {
-                                wfsStatus = uptimeStatus;
-                                i.wfs = 1;
-                            }
-                            queryLink = '';
                             if (lookUp.length > 0) {
                                 responseTime = parseInt(lookUp[0].average_response_time);
                                 uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
-                                queryLink = `<a href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+                                monitorLink = `<a href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
                                 switch (lookUp[0].status) {
                                     case 2:
                                         if (responseTime < 2000 && uptime > 99) {
-                                            uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[1]}</a>`;
+                                            addStatus = 2;
                                         } else {
-                                            uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[2]}</a>`;
-                                        }
-
-                                        if (i.wms == 1 && i.typ !== 'Geoserver' && responseTime < 4000 && uptime > 99) {
-                                            restStatus = `<a href="${utrLink+lookUp[0].id}">${face[1]}</a>`
-                                        } else {
-                                            restStatus = uptimeStatus;
+                                            addStatus = 3;
                                         }
                                         break;
                                     case 0:
-                                        uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[3]}</a>`;
+                                        addStatus = 4;
                                         break;
                                     case 8:
-                                        uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[3]}</a>`;
+                                        addStatus = 4;
                                         break;
                                     case 9:
-                                        uptimeStatus = `<a href="${utrLink+lookUp[0].id}">${face[3]}</a>`;
+                                        addStatus = 4;
+                                        break;
                                 }
-
+                            } else if (serverTyp.includes(i.typ)) {
+                                i.wms = 5;
                             }
+
+                            if (wfsServices.includes(i.name)) {
+                                i.wfs = 1;
+                            }
+                            if (WMSList.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
+                                i.wms = 1;
+                            }
+                            if (RESTList.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
+                                i.rest = 1;
+                            }
+                            if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 4000) {
+                                restBonus = 1;
+                            }
+
                             $('#monitors').append(`<tr>
-                                        <td><a title="website" href="${i.url}"><i class="fas fa-server"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
-                                        <td>${i.typ}</td>
-                                        <td>${i.server}</td>
-                                        <td class="middle">${restStatus}</td>
-                                        <td class="middle">${(i.wms==1)?uptimeStatus:wmsStatus}</td>
-                                        <td class="middle">${(i.wfs==1)?uptimeStatus:wfsStatus}</td>
-                                        <td class="middle">${(i.csw==1)?uptimeStatus:''}</td>
-                                        <td class="middle">${(i.sparql==1)?uptimeStatus:''}</td>
-                                        <td class="middle">${(i.oai==1)?uptimeStatus:''}</td>
-                                        <td class="middle">${queryLink}</td>
-                                        <td class="number">${uptime}</td>
-                                        <td class="number">${responseTime}</td>
-                                    </tr>`);
+                                                <td><a title="website" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
+                                                <td>${i.typ}</td>
+                                                <td>${i.server}</td>
+                                                <td class="middle">${smiley[i.rest * addStatus - restBonus]}</td>
+                                                <td class="middle">${smiley[i.wms * addStatus]}</td>
+                                                <td class="middle">${smiley[i.wfs * addStatus]}</td>
+                                                <td class="middle">${smiley[i.csw * addStatus]}</td>
+                                                <td class="middle">${smiley[i.sparql * addStatus]}</td>
+                                                <td class="middle">${smiley[i.oai * addStatus]}</td>
+                                                <td class="middle">${monitorLink}</td>
+                                                <td class="number">${uptime}</td>
+                                                <td class="number">${responseTime}</td>
+                                            </tr>`);
                         }
 
                         //https://datatables.net/examples/basic_init/
