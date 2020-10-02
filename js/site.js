@@ -105,17 +105,17 @@ Promise.all(serverList.map(s =>
                     .then(data2 => {
                         monitorsList = monitorsList.concat(data2.monitors);
                         //console.log(monitorsList);
+                        let u1 = '<a title="stats" href="https://stats.uptimerobot.com/nNwk9IGgjk/$">';
+                        let u2 = '</a>';
 
                         let smiley = {
                             0: '<span class="hidden">7</span>', //empty
                             1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
-                            2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
-                            3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
-                            4: '<span class="hidden">4</span><i class="fas fa-angry" style="color:#e74c3c;"></i>', //down
+                            2: u1 + '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>' + u2, //OK
+                            3: u1 + '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>' + u2, //slow
+                            4: u1 + '<span class="hidden">4</span><i class="fas fa-angry" style="color:#e74c3c;"></i>' + u2, //down
                             5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:lightgrey;"></i>' //possible
                         };
-
-                        let utrLink = 'https://stats.uptimerobot.com/nNwk9IGgjk/';
 
                         //console.log('allServices', allServices);
 
@@ -130,6 +130,7 @@ Promise.all(serverList.map(s =>
                         let responseTime = '';
                         let uptime = '';
                         let restBonus = 0;
+                        let lookUpID = '';
 
                         for (let i of allServices) {
 
@@ -141,11 +142,14 @@ Promise.all(serverList.map(s =>
                             restBonus = 0;
                             responseTime = '-';
                             uptime = '-';
+                            lookUpID = '';
+
 
                             if (lookUp.length > 0) {
                                 responseTime = parseInt(lookUp[0].average_response_time);
                                 uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
-                                monitorLink = `<a href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+                                monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+                                lookUpID = lookUp[0].id;
 
                                 switch (lookUp[0].status) {
                                     case 2:
@@ -183,19 +187,19 @@ Promise.all(serverList.map(s =>
                             }
 
                             $('#monitors').append(`<tr>
-                                                <td><a title="website" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
-                                                <td>${i.typ}</td>
-                                                <td>${i.server}</td>
-                                                <td class="middle">${smiley[i.rest * addStatus - restBonus]}</td>
-                                                <td class="middle">${smiley[i.wms * addStatus]}</td>
-                                                <td class="middle">${smiley[i.wfs * addStatus]}</td>
-                                                <td class="middle">${(i.csw==5)?smiley[5]:smiley[i.csw * addStatus]}</td>
-                                                <td class="middle">${smiley[i.sparql * addStatus]}</td>
-                                                <td class="middle">${(i.oai==5)?smiley[5]:smiley[i.oai * addStatus]}</td>
-                                                <td class="middle">${monitorLink}</td>
-                                                <td class="number">${uptime}</td>
-                                                <td class="number">${responseTime}</td>
-                                            </tr>`);
+                                <td><a title="info" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
+                                <td>${i.typ}</td>
+                                <td>${i.server}</td>
+                                <td class="middle">${(smiley[i.rest * addStatus - restBonus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${(smiley[i.wms * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${(smiley[i.wfs * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.csw==5)?smiley[5]:smiley[i.csw * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${(smiley[i.sparql * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.oai==5)?smiley[5]:smiley[i.oai * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${monitorLink}</td>
+                                <td class="number">${uptime}</td>
+                                <td class="number">${responseTime}</td>
+                            </tr>`);
                         }
 
                         //https://datatables.net/examples/basic_init/
