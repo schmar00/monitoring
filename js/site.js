@@ -34,9 +34,9 @@ const regServices = [
     new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1, 0),
     new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 0, 0),
     new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1),
-    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 0),
+    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 5),
     new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 0, 0),
-    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/catalog.search', 'OSGeo', 1, 0, 0, 0, 0, 0),
+    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/', 'OSGeo', 1, 0, 0, 5, 0, 0),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 0),
     new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0),
     new Service('test-html', 'Website', 'http://www.geolba.net/abc.html', 'alfa', 1, 0, 0, 0, 0, 0, 0)
@@ -117,7 +117,7 @@ Promise.all(serverList.map(s =>
 
                         let utrLink = 'https://stats.uptimerobot.com/nNwk9IGgjk/';
 
-                        console.log('allServices', allServices);
+                        //console.log('allServices', allServices);
 
                         let WMSList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
                         let RESTList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
@@ -135,7 +135,7 @@ Promise.all(serverList.map(s =>
 
                             let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
 
-                            console.log('lookUp', lookUp);
+                            //console.log('lookUp', lookUp);
                             monitorLink = '';
                             addStatus = 1;
                             restBonus = 0;
@@ -189,9 +189,9 @@ Promise.all(serverList.map(s =>
                                                 <td class="middle">${smiley[i.rest * addStatus - restBonus]}</td>
                                                 <td class="middle">${smiley[i.wms * addStatus]}</td>
                                                 <td class="middle">${smiley[i.wfs * addStatus]}</td>
-                                                <td class="middle">${smiley[i.csw * addStatus]}</td>
+                                                <td class="middle">${(i.csw==5)?smiley[5]:smiley[i.csw * addStatus]}</td>
                                                 <td class="middle">${smiley[i.sparql * addStatus]}</td>
-                                                <td class="middle">${smiley[i.oai * addStatus]}</td>
+                                                <td class="middle">${(i.oai==5)?smiley[5]:smiley[i.oai * addStatus]}</td>
                                                 <td class="middle">${monitorLink}</td>
                                                 <td class="number">${uptime}</td>
                                                 <td class="number">${responseTime}</td>
