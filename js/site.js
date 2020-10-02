@@ -38,8 +38,7 @@ const regServices = [
     new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 0, 0),
     new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/', 'OSGeo', 1, 0, 0, 5, 0, 0),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 0),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0),
-    new Service('test-html', 'Website', 'http://www.geolba.net/abc.html', 'alfa', 1, 0, 0, 0, 0, 0, 0)
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0)
 ];
 
 function getServices(response, server) {
