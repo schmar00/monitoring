@@ -1,7 +1,7 @@
 //list ArcGIS services
 
 class Service {
-    constructor(name, typ, url, server, rest, wms, wfs, csw, sparql, oai) { // Constructor
+    constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai) { // Constructor
         this.name = name;
         this.typ = typ;
         this.url = url;
@@ -10,7 +10,7 @@ class Service {
         this.wms = wms;
         this.wfs = wfs;
         this.csw = csw;
-        this.sparql = sparql;
+        this.rdf = rdf;
         this.oai = oai;
     }
 }
@@ -32,12 +32,12 @@ const regServices = [
     new Service('Thesaurus Mineral Resources', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/minres', 'PoolParty', 1, 0, 0, 0, 1, 0),
     new Service('GeoERA Keywords (GBA)', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/keyword', 'PoolParty', 1, 0, 0, 0, 1, 0),
     new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1, 0),
-    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 0, 0),
+    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 1, 1),
     new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1),
     new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 5),
-    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 0, 0),
-    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/', 'OSGeo', 1, 0, 0, 5, 0, 0),
-    new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 0),
+    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 5, 5),
+    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/', 'OSGeo', 1, 0, 0, 5, 5, 1),
+    new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 5),
     new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0)
 ];
 
@@ -123,7 +123,7 @@ Promise.all(serverList.map(s =>
 
                         let queryLink = '';
 
-                        let wfsServices = ['IRIS_Lagerstaetten_Reviere (projekte_iris)', 'GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)'];
+                        let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)','TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
                         let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
 
                         let responseTime = '';
@@ -189,11 +189,11 @@ Promise.all(serverList.map(s =>
                                 <td><a title="info" class="help" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
                                 <td>${i.typ}</td>
                                 <td>${i.server}</td>
-                                <td class="middle">${(smiley[i.rest * addStatus - restBonus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${(smiley[i.wms * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${(smiley[i.wfs * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.rest==5)?smiley[5]:smiley[i.rest * addStatus - restBonus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.wms==5)?smiley[5]:smiley[i.wms * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.wfs==5)?smiley[5]:smiley[i.wfs * addStatus]).replace('$',lookUpID)}</td>
                                 <td class="middle">${((i.csw==5)?smiley[5]:smiley[i.csw * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${(smiley[i.sparql * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.rdf==5)?smiley[5]:smiley[i.rdf * addStatus]).replace('$',lookUpID)}</td>
                                 <td class="middle">${((i.oai==5)?smiley[5]:smiley[i.oai * addStatus]).replace('$',lookUpID)}</td>
                                 <td class="middle">${monitorLink}</td>
                                 <td class="number">${uptime}</td>
