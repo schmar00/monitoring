@@ -123,7 +123,7 @@ Promise.all(serverList.map(s =>
 
                         let queryLink = '';
 
-                        let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)','TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
+                        let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)', 'TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
                         let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
 
                         let responseTime = '';
@@ -210,13 +210,22 @@ Promise.all(serverList.map(s =>
                         });
                         $('#loading').hide();
 
-
+                        $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
+                        $('#example_filter').parent().parent().append(`
+                            <div class="col-sm-12 col-md-4">
+                                <strong>uptime status:</strong>
+                                <br>
+                                <span class="legend">
+                                ${smiley[2]} OK&nbsp;&nbsp;&nbsp;
+                                ${smiley[3]} slow&nbsp;&nbsp;&nbsp;
+                                ${smiley[4]} down&nbsp;&nbsp;
+                                ${smiley[1]} unknown&nbsp;
+                                ${smiley[5]} relevant&nbsp;
+                                </span>
+                            </div>`);
                     });
             });
-
     });
-
-
 
 
 async function postData(url = '', data = {}) {
