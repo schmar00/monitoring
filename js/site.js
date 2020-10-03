@@ -110,9 +110,9 @@ Promise.all(serverList.map(s =>
                         let smiley = {
                             0: '<span class="hidden">7</span>', //empty
                             1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
-                            2: u1 + '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>' + u2, //OK
-                            3: u1 + '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>' + u2, //slow
-                            4: u1 + '<span class="hidden">4</span><i class="fas fa-angry" style="color:#e74c3c;"></i>' + u2, //down
+                            2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
+                            3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
+                            4: '<span class="hidden">4</span><i class="fas fa-angry" style="color:#e74c3c;"></i>', //down
                             5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:lightgrey;"></i>' //possible
                         };
 
@@ -136,19 +136,19 @@ Promise.all(serverList.map(s =>
                             let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
 
                             //console.log('lookUp', lookUp);
-                            monitorLink = '';
+                            monitorLink = '-';
                             addStatus = 1;
                             restBonus = 0;
                             responseTime = '-';
                             uptime = '-';
-                            lookUpID = '';
+                            lookUpID = '-';
 
 
                             if (lookUp.length > 0) {
                                 responseTime = parseInt(lookUp[0].average_response_time);
                                 uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
-                                monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
-                                lookUpID = lookUp[0].id;
+                                monitorLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${lookUp[0].id}"><i class="fas fa-poll"></i></a>`;
+                                lookUpID = `<a title="try" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
                                 switch (lookUp[0].status) {
                                     case 2:
@@ -186,20 +186,24 @@ Promise.all(serverList.map(s =>
                             }
 
                             $('#monitors').append(`<tr>
-                                <td><a title="info" class="help" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
+                                <td><a title="link" href="${i.url}"><i class="fas fa-link"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
                                 <td>${i.typ}</td>
                                 <td>${i.server}</td>
-                                <td class="middle">${((i.rest==5)?smiley[5]:smiley[i.rest * addStatus - restBonus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${((i.wms==5)?smiley[5]:smiley[i.wms * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${((i.wfs==5)?smiley[5]:smiley[i.wfs * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${((i.csw==5)?smiley[5]:smiley[i.csw * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${((i.rdf==5)?smiley[5]:smiley[i.rdf * addStatus]).replace('$',lookUpID)}</td>
-                                <td class="middle">${((i.oai==5)?smiley[5]:smiley[i.oai * addStatus]).replace('$',lookUpID)}</td>
+                                <td class="middle">${((i.rest==5)?smiley[5]:smiley[i.rest * addStatus - restBonus])}</td>
+                                <td class="middle">${((i.wms==5)?smiley[5]:smiley[i.wms * addStatus])}</td>
+                                <td class="middle">${((i.wfs==5)?smiley[5]:smiley[i.wfs * addStatus])}</td>
+                                <td class="middle">${((i.csw==5)?smiley[5]:smiley[i.csw * addStatus])}</td>
+                                <td class="middle">${((i.rdf==5)?smiley[5]:smiley[i.rdf * addStatus])}</td>
+                                <td class="middle">${((i.oai==5)?smiley[5]:smiley[i.oai * addStatus])}</td>
                                 <td class="middle">${monitorLink}</td>
+                                <td class="middle">${lookUpID}</td>
                                 <td class="number">${uptime}</td>
                                 <td class="number">${responseTime}</td>
                             </tr>`);
                         }
+
+
+                    //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
                         //https://datatables.net/examples/basic_init/
 
@@ -213,7 +217,7 @@ Promise.all(serverList.map(s =>
                         $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
                         $('#example_filter').parent().parent().append(`
                             <div class="col-sm-12 col-md-4">
-                                <strong>uptime status:</strong>
+                                uptime status:
                                 <br>
                                 <span class="legend">
                                 ${smiley[2]} OK&nbsp;&nbsp;&nbsp;
