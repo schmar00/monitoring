@@ -186,7 +186,7 @@ Promise.all(serverList.map(s =>
                             }
 
                             $('#monitors').append(`<tr>
-                                <td><a title="info" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
+                                <td><a title="info" class="help" href="${i.url}"><i class="fas fa-info-circle"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
                                 <td>${i.typ}</td>
                                 <td>${i.server}</td>
                                 <td class="middle">${(smiley[i.rest * addStatus - restBonus]).replace('$',lookUpID)}</td>
@@ -208,6 +208,7 @@ Promise.all(serverList.map(s =>
                             //"paging": false
                             "lengthMenu": [25, 50, 100]
                         });
+                        $('#loading').hide();
 
 
                     });

@@ -14,6 +14,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="css/FontAwesome/all.min.css" />
+    <link href="css/jquery.dataTables.min.css">
+
     <script src="js/jquery.slim.min.js"></script>
     <script src="js/site.js"></script>
     <script src="js/jquery.dataTables.min.js"></script>
@@ -31,6 +33,24 @@
         .hidden {
             opacity: 0%;
             font-size: 1px;
+        }
+
+        .pointer {
+            cursor: pointer;
+        }
+
+        .help {
+            cursor: help;
+        }
+
+        #loading {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            z-index: 1000;
+            color: aqua;
+            width: 3rem;
+            height: 3rem;
         }
 
     </style>
@@ -74,7 +94,7 @@
                 <!--        <h1 class="mt-5">A Bootstrap 4 Starter Template</h1>-->
                 <p class="lead">Web APIs overview, uptime ratio and response times average</p>
                 <table id="example" class="text-left table table-hover table-striped table-sm order-column">
-                    <thead>
+                    <thead class="pointer" title="sort">
                         <tr>
                             <th scope="col">Web service</th>
                             <th scope="col">Server</th>
@@ -93,6 +113,9 @@
                     <tbody id="monitors">
                     </tbody>
                 </table>
+                <div id="loading" class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
             </div>
         </div>
     </div>
