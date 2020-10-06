@@ -36,9 +36,10 @@ const regServices = [
     new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1),
     new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 5),
     new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 1, 5),
-    new Service('LRFZ Catalog', 'Catalog', 'https://geometadatensuche.inspire.gv.at/metadatensuche/srv/ger/', 'OSGeo', 1, 0, 0, 5, 5, 1),
+    new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 5),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 0)
+    new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 5),
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0)
 ];
 
 function getServices(response, server) {
@@ -181,7 +182,7 @@ Promise.all(serverList.map(s =>
                             if (RESTList.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
                                 i.rest = 1;
                             }
-                            if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 4000) {
+                            if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 2500) {
                                 restBonus = 1;
                             }
 
@@ -221,7 +222,7 @@ Promise.all(serverList.map(s =>
                                 <br>
                                 <span class="legend">
                                 ${smiley[2]} OK&nbsp;&nbsp;&nbsp;
-                                ${smiley[3]} slow&nbsp;&nbsp;&nbsp;
+                                ${smiley[3]} slow (>2s)&nbsp;&nbsp;&nbsp;
                                 ${smiley[4]} down&nbsp;&nbsp;
                                 ${smiley[1]} unknown&nbsp;
                                 ${smiley[5]} relevant&nbsp;
