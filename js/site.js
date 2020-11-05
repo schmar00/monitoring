@@ -114,7 +114,7 @@ Promise.all(serverList.map(s =>
                             2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
                             3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
                             4: '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>', //down
-                            5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:lightgrey;"></i>' //possible
+                            5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:grey;"></i>' //possible
                         };
 
                         //console.log('allServices', allServices);
