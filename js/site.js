@@ -160,7 +160,7 @@ Promise.all(serverList.map(s =>
                                         }
                                         break;
                                     case 0:
-                                        addStatus = 4;
+                                        addStatus = 5;
                                         break;
                                     case 8:
                                         addStatus = 4;
