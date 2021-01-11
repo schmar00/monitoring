@@ -204,12 +204,14 @@ Promise.all(serverList.map(s =>
                         }
 
 
-                    //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+                        //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
                         //https://datatables.net/examples/basic_init/
 
                         $('#example').DataTable({
-                            "order": [[1, "asc"]], //nach Namen sortiert
+                            "order": [
+                                [1, "asc"]
+                            ], //nach Namen sortiert
                             //"paging": false
                             "lengthMenu": [25, 50, 100]
                         });
