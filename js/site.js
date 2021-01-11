@@ -1,4 +1,4 @@
-//list ArcGIS services
+//list all ArcGIS services 
 
 class Service {
     constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai) { // Constructor
