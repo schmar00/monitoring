@@ -69,7 +69,7 @@ function getServices(response, server) {
 
 let serverList = [
     new Server('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap', 'ArcGIS'),
-    new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage?4&filter=false', 'OSGeo')
+    //new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage', 'OSGeo')
 ];
 
 Promise.all(serverList.map(s =>
