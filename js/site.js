@@ -39,7 +39,25 @@ const regServices = [
     new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 5),
     new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 5),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0)
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Mineral Occurrence', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/mr_lagerst/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Active Wells', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Natural Hydrogeological Objects', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Hydrogeologische Einheiten 1:500.000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Airborne geophysical survey', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Georadar profile', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Multi-electrode dc profile', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Seismic line', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:1 Mio. - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:1 Mio. - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:200.000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:50 000 - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:50 000 - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:500 000 - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Geologische Einheiten 1:500 000 - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('INSPIRE Gravitative Massenbewegungen - Observed Events (Media) Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/nz_risiken/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Tektonische Linien 1:1 Mio. Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_tectlines/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
+    new Service('Tektonische Linien 1:50000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_tectlines/wms', 'OSGeo', 1, 1, 0, 0, 0, 0)
 ];
 
 function getServices(response, server) {
