@@ -167,7 +167,7 @@ Promise.all(serverList.map(s =>
                                 responseTime = parseInt(lookUp[0].average_response_time);
                                 uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
                                 monitorLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${lookUp[0].id}"><i class="fas fa-poll"></i></a>`;
-                                lookUpID = `<a title="try" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+                                lookUpID = `<a title="view" href="${lookUp[0].url}"><i class="far fa-eye"></i></a>`;
 
                                 switch (lookUp[0].status) {
                                     case 2:
