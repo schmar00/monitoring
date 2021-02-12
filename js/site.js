@@ -39,6 +39,9 @@ const regServices = [
     new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 5),
     new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 5),
+    new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0),
+    new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0),
+    new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0),
     new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
     new Service('Mineral Occurrence', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/mr_lagerst/wms?service=WMS&layers=mr_lagerst%3AMR.MineralOccurrence', 'OSGeo', 1, 1, 0, 0, 0, 0),
     new Service('Active Wells', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms?service=WMS&layers=hg_hydgeol%3AGE.ActiveWell', 'OSGeo', 1, 1, 0, 0, 0, 0),
@@ -90,121 +93,101 @@ let serverList = [
     //new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage', 'OSGeo')
 ];
 
-Promise.all(serverList.map(s =>
-        fetch(s.url)
-        .then(resp => resp.text())
-        .then(data => getServices(data, s.typ))
-    ))
-    .then(texts => {
-        let allServices = texts.flat().concat(regServices);
-        let monitorsList = [];
+const getMonitors = async () => {
+    return monitorsList;
+}
 
-        postData('https://api.uptimerobot.com/v2/getMonitors', {
-                answer: 42,
-                api_key: 'ur1005820-31d8f6b693be1669f8596d19',
-                response_times: 1,
-                response_times_average: 1,
-                all_time_uptime_ratio: 1
+getMonitors().then(monitorsList => {
+    Promise.all(serverList.map(s =>
+            fetch(s.url)
+            .then(resp => resp.text())
+            .then(data => getServices(data, s.typ))
+        ))
+        .then(texts => {
+            let allServices = texts.flat().concat(regServices);
 
-            })
-            .then(data1 => {
-                monitorsList = data1.monitors;
-                //console.log(monitorsList);
+            let u1 = '<a title="stats" href="https://stats.uptimerobot.com/nNwk9IGgjk/$">';
+            let u2 = '</a>';
 
-                postData('https://api.uptimerobot.com/v2/getMonitors', {
-                        answer: 42,
-                        api_key: 'ur1005820-31d8f6b693be1669f8596d19',
-                        response_times: 1,
-                        response_times_average: 1,
-                        all_time_uptime_ratio: 1,
-                        offset: 50
+            let smiley = {
+                0: '<span class="hidden">7</span>', //empty
+                1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
+                2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
+                3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
+                4: '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>', //down
+                5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:grey;"></i>' //possible
+            };
 
-                    })
-                    .then(data2 => {
-                        monitorsList = monitorsList.concat(data2.monitors);
-                        //console.log(monitorsList);
-                        let u1 = '<a title="stats" href="https://stats.uptimerobot.com/nNwk9IGgjk/$">';
-                        let u2 = '</a>';
+            //console.log('allServices', allServices);
 
-                        let smiley = {
-                            0: '<span class="hidden">7</span>', //empty
-                            1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
-                            2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
-                            3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
-                            4: '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>', //down
-                            5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:grey;"></i>' //possible
-                        };
+            let WMSList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
+            let RESTList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
 
-                        //console.log('allServices', allServices);
+            let queryLink = '';
 
-                        let WMSList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
-                        let RESTList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
+            let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)', 'TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
+            let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
 
-                        let queryLink = '';
+            let responseTime = '';
+            let uptime = '';
+            let restBonus = 0;
+            let lookUpID = '';
 
-                        let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)', 'TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
-                        let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
+            for (let i of allServices) {
 
-                        let responseTime = '';
-                        let uptime = '';
-                        let restBonus = 0;
-                        let lookUpID = '';
+                let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
 
-                        for (let i of allServices) {
-
-                            let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
-
-                            //console.log('lookUp', lookUp);
-                            monitorLink = '-';
-                            addStatus = 1;
-                            restBonus = 0;
-                            responseTime = '-';
-                            uptime = '-';
-                            lookUpID = '-';
+                //console.log('lookUp', lookUp);
+                monitorLink = '-';
+                addStatus = 1;
+                restBonus = 0;
+                responseTime = '-';
+                uptime = '-';
+                lookUpID = '-';
 
 
-                            if (lookUp.length > 0) {
-                                responseTime = parseInt(lookUp[0].average_response_time);
-                                uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
-                                monitorLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${lookUp[0].id}"><i class="fas fa-poll"></i></a>`;
-                                lookUpID = `<a title="view" href="${lookUp[0].url}"><i class="far fa-eye"></i></a>`;
+                if (lookUp.length > 0) {
+                    responseTime = parseInt(lookUp[0].average_response_time);
+                    uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
+                    monitorLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${lookUp[0].id}"><i class="fas fa-poll"></i></a>`;
+                    lookUpID = `<a title="view" href="${lookUp[0].url}"><i class="far fa-eye"></i></a>`;
 
-                                switch (lookUp[0].status) {
-                                    case 2:
-                                        if (responseTime < 2000 && uptime > 99) {
-                                            addStatus = 2;
-                                        } else {
-                                            addStatus = 3;
-                                        }
-                                        break;
-                                    case 0:
-                                        addStatus = 5;
-                                        break;
-                                    case 8:
-                                        addStatus = 4;
-                                        break;
-                                    case 9:
-                                        addStatus = 4;
-                                        break;
-                                }
-                            } else if (serverTyp.includes(i.typ)) {
-                                i.wms = 5;
+                    switch (lookUp[0].status) {
+                        case 2:
+                            if (responseTime < 2000 && uptime > 99) {
+                                addStatus = 2;
+                            } else {
+                                addStatus = 3;
                             }
+                            break;
+                        case 0:
+                            addStatus = 5;
+                            break;
+                        case 8:
+                            addStatus = 4;
+                            break;
+                        case 9:
+                            addStatus = 4;
+                            break;
+                    }
+                } else if (serverTyp.includes(i.typ)) {
+                    i.wms = 5;
+                }
 
-                            if (wfsServices.includes(i.name)) {
-                                i.wfs = 1;
-                            }
-                            if (WMSList.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
-                                i.wms = 1;
-                            }
-                            if (RESTList.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
-                                i.rest = 1;
-                            }
-                            if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 2500) {
-                                restBonus = 1;
-                            }
+                if (wfsServices.includes(i.name)) {
+                    i.wfs = 1;
+                }
+                if (WMSList.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
+                    i.wms = 1;
+                }
+                if (RESTList.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
+                    i.rest = 1;
+                }
+                if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 2500) {
+                    restBonus = 1;
+                }
 
-                            $('#monitors').append(`<tr>
+                $('#monitors').append(`<tr>
                                 <td><a title="link" href="${i.url}"><i class="fas fa-link"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
                                 <td>${i.typ}</td>
                                 <td>${i.server}</td>
@@ -219,24 +202,24 @@ Promise.all(serverList.map(s =>
                                 <td class="number">${uptime}</td>
                                 <td class="number">${responseTime}</td>
                             </tr>`);
-                        }
+            }
 
 
-                        //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
+            //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
 
-                        //https://datatables.net/examples/basic_init/
+            //https://datatables.net/examples/basic_init/
 
-                        $('#example').DataTable({
-                            "order": [
-                                [1, "asc"]
-                            ], //nach Namen sortiert
-                            //"paging": false
-                            "lengthMenu": [25, 50, 100]
-                        });
-                        $('#loading').hide();
+            $('#example').DataTable({
+                "order": [
+                    [1, "asc"]
+                ], //nach Namen sortiert
+                //"paging": false
+                "lengthMenu": [25, 50, 100]
+            });
+            $('#loading').hide();
 
-                        $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
-                        $('#example_filter').parent().parent().append(`
+            $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
+            $('#example_filter').parent().parent().append(`
                             <div class="col-sm-12 col-md-4">
                                 uptime status:
                                 <br>
@@ -248,10 +231,10 @@ Promise.all(serverList.map(s =>
                                 ${smiley[5]} relevant&nbsp;
                                 </span>
                             </div>`);
-                    });
-            });
-    });
 
+
+        });
+});
 
 async function postData(url = '', data = {}) {
     // Default options are marked with *
