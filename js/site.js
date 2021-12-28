@@ -1,3 +1,6 @@
+/* fetch('https://resource.geolba.net/webservices/getMonitors.php');
+fetch('https://resource.geolba.net/webservices/gsLayer.js'); */
+
 class Service {
     constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai, urlPart) { // Constructor
         this.name = name;
@@ -38,12 +41,15 @@ let regServices = [ //
 ];
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    Promise.all([getMonitors(), getGsLayer(), getArcGisLayer()]) //get external resources
-        .then((val) => {
-            console.log(val);
-            addArcGisServices(val[2]);
-            addGsServices(val[1]);
-            createHTML(val[0]);
+    fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
+        .then(res => res.text())
+        .then(data => {
+            let urlArr = data.split('<loc>').map(a => a.split('</loc>')[0]);
+            urlArr.shift();
+            addArcGisServices(urlArr);
+            addGsServices(gsLayer);
+            //console.log(uptimeArr);
+            createHTML(uptimeArr.map(a => a.monitors).flat());
         });
 });
 
@@ -92,9 +98,7 @@ function createHTML(monitorArr) {
         <td class="number">${all_time_uptime_ratio}</td>
         <td class="number">${average_response_time}</td>
         </tr>`);
-
     }
-
 }
 
 function getSmiley(s, status, slow) {
@@ -145,30 +149,4 @@ function addGsServices(s) {
         regServices.push(new Service(c.title, 'Geoserver', c.url, 'OSGeo', 1, 1, 1, 0, 0, 0, check));
     }
     //console.log(regServices);
-}
-
-function getMonitors() { //get uptime stats
-    return fetch('https://resource.geolba.net/webservices/getMonitors.php')
-        .then(res => res.text())
-        .then(data => {
-            return (data.split('|').map(a => JSON.parse(a).monitors).flat());
-        });
-}
-
-function getGsLayer() { //get all Geoserver layers
-    return fetch('https://resource.geolba.net/webservices/gsLayer.php')
-        .then(res => res.json())
-        .then(data => {
-            return (data);
-        });
-}
-
-function getArcGisLayer() { //get all ArcGIS services
-    return fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
-        .then(res => res.text())
-        .then(data => {
-            let urlArr = data.split('<loc>').map(a => a.split('</loc>')[0]);
-            urlArr.shift();
-            return (urlArr);
-        });
 }
