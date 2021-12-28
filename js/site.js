@@ -37,7 +37,7 @@ let regServices = [ //
     new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'ccca.ac.at'),
     new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'data.gv.at'),
     new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0, 'europeandataportal'),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', '?', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
 ];
 
 let otherIDs = [];
@@ -162,11 +162,12 @@ function addWebsites(monitorArr) {
     }
 }
 
-
-
 function getSmiley(s, status, slow) {
-    if (s > 0) {
+    if (s == 1) {
         s += status + slow;
+    }
+    if (s > 8) {
+        s = 9;
     }
 
     switch (s) {
@@ -182,7 +183,7 @@ function getSmiley(s, status, slow) {
         case 4: //slow
             return '<span class="hidden">2</span><i class="fas fa-meh" style="color:#FFC300;"></i>';
             break;
-        case 10: //down
+        case 9: //down
             return '<span class="hidden">3</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
             break;
         default: //not available
