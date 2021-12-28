@@ -1,7 +1,5 @@
-//list ArcGIS services and types
-
 class Service {
-    constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai) { // Constructor
+    constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai, urlPart) { // Constructor
         this.name = name;
         this.typ = typ;
         this.url = url;
@@ -12,244 +10,165 @@ class Service {
         this.csw = csw;
         this.rdf = rdf;
         this.oai = oai;
-    }
-}
-//test comment
-class Server {
-    constructor(url, typ) {
-        this.url = url;
-        this.typ = typ;
+        this.urlPart = urlPart; //url part to find monitor
     }
 }
 
-const regServices = [
-    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus GeologicUnit', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus GeologicTimeScale', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicTimeScale', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus TectonicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/tectonicunit', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus Mineral', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/mineral', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('Thesaurus Mineral Resources', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/minres', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('GeoERA Keywords (GBA)', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/keyword', 'PoolParty', 1, 0, 0, 0, 1, 0),
-    new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1, 0),
-    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 5, 0),
-    new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1),
-    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 5),
-    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 1, 5),
-    new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1),
-    new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 5),
-    new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 5),
-    new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0),
-    new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0),
-    new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Mineral Occurrence', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/mr_lagerst/wms?service=WMS&layers=mr_lagerst%3AMR.MineralOccurrence', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Active Wells', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms?service=WMS&layers=hg_hydgeol%3AGE.ActiveWell', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Natural Hydrogeological Objects', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms?service=WMS&layers=hg_hydgeol%3AGE.HydrogeologicalObjectNatural', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Hydrogeologische Einheiten 1:500.000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/hg_hydgeol/wms?service=WMS&layers=hg_hydgeol%3Ahg500_einheiten', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Airborne geophysical survey', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms?service=WMS&layers=gp_geophysik%3AGE.AirborneGeophysicalSurvey', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Georadar profile', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms?service=WMS&layers=gp_geophysik%3AGE.GeoradarProfile', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Multi-electrode dc profile', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms?service=WMS&layers=gp_geophysik%3AGE.MultielectrodeDCProfile', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Seismic line', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/gp_geophysik/wms?service=WMS&layers=gp_geophysik%3AGE.SeismicLine', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:1 Mio. - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.1M.AgeOfRocks', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:1 Mio. - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.1M.Lithology', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:200.000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.k200', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:50 000 - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.k50.AgeOfRocks', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:50 000 - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.k50.Lithology', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:500 000 - Alter', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.k500.AgeOfRocks', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Geologische Einheiten 1:500 000 - Lithologie', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_einheiten/wms?service=WMS&layers=ge_einheiten%3AGE.GeologicUnit.k500.Lithology', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('INSPIRE Gravitative Massenbewegungen - Observed Events (Media) Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/nz_risiken/wms?service=WMS&layers=%20nz_risiken%3ANZ.ObservedEvent', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Tektonische Linien 1:1 Mio. Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_tectlines/wms?service=WMS&layers=%20ge_tectlines%3AGE.GeologicFault.1Mio', 'OSGeo', 1, 1, 0, 0, 0, 0),
-    new Service('Tektonische Linien 1:50000 Österreich', ' GeoServer', 'https://gis.geologie.ac.at/geoserver/ge_tectlines/wms?service=WMS&layers=%20ge_tectlines%3AGE.GeologicFault.50k', 'OSGeo', 1, 1, 0, 0, 0, 0)
+let regServices = [ //
+    new Service('Thesaurus Lithology', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/lithology', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/lithology'),
+    new Service('Thesaurus GeologicUnit', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicUnit', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/GeologicUnit'),
+    new Service('Thesaurus Structure', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/structure', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/structure'),
+    new Service('Thesaurus GeologicTimeScale', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/GeologicTimeScale', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/GeologicTimeScale'),
+    new Service('Thesaurus TectonicUnits', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/tectonicunit', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/tectonicunit'),
+    new Service('Thesaurus Mineral', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/mineral', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/mineral'),
+    new Service('Thesaurus Mineral Resources', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/minres', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/minres'),
+    new Service('GeoERA Keywords (GBA)', 'RDF Server', 'https://resource.geolba.ac.at/PoolParty/sparql/keyword', 'PoolParty', 1, 0, 0, 0, 1, 0, 'sparql/keyword'),
+    new Service('GeoERA Keywords (BRGM)', 'RDF Server', 'https://data.geoscience.earth/ncl/system', 'Jena', 1, 0, 0, 0, 1, 0, 'data.geoscience.earth/ncl'),
+    new Service('GBA Geonetwork', 'Catalog', 'https://gis.geologie.ac.at/geonetwork', 'OSGeo', 1, 0, 0, 1, 1, 0, 'gis.geologie.ac.at/geonetwork'),
+    new Service('Tethys - Research Data Repository', 'Repository', 'https://tethys.at/oai', 'Tethys', 1, 0, 0, 0, 0, 1, 'tethys.at/oai'),
+    new Service('OPAC - Online Catalog', 'Catalog', 'https://opac.geologie.ac.at/wwwopacx/wwwopac.ashx', 'AdLib', 1, 0, 0, 0, 0, 1, 'opac.geologie.ac.at'),
+    new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 1, 1, 'egdi.geology.cz'),
+    new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1, 'lfrz.at'),
+    new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 1, 'inspire-geoportal.ec'),
+    new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1, 'bev.gv.at/geonetwork'),
+    new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'ccca.ac.at'),
+    new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'data.gv.at'),
+    new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0, 'europeandataportal'),
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
 ];
 
-function getServices(response, server) {
-    let b = [];
-    switch (server) {
-        case 'ArcGIS':
-            for (item of response.replace(/(\r\n|\n|\r|https:\/\/gisgba.geologie.ac.at\/arcgis\/rest\/services\/)/gm, '').split('<loc>')) {
-                let c = item.split('</loc>')[0].split('/');
-                let d = 'https://gisgba.geologie.ac.at/arcgis/rest/services/' + item.split('<')[0];
-                if (c.length > 2) {
-                    b.push(new Service(c[1] + ' (' + c[0] + ')', c[2], d, server, 1, 0, 0, 0, 0, 0, 0));
-                } else {
-                    b.push(new Service(c[0], c[1], d, server, 1, 0, 0, 0, 0, 0, 0));
-                }
-            }
-            b.shift();
-            return b;
-            break;
-        case 'OSGeo':
-            for (item of response.split('http').filter(s => s.includes('/ows?')).map(a => 'http' + a.split('/ows?')[0] + '/ows').filter((v, i, a) => a.indexOf(v) === i)) {
-                b.push(new Service(item.split('/')[4], 'Geoserver', item, server, 1, 1, 0, 0, 0, 0, 0));
-            }
-            return b;
-    }
-}
-
-
-let serverList = [
-    new Server('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap', 'ArcGIS'),
-    //new Server('https://gis.geologie.ac.at/geoserver/web/wicket/bookmarkable/org.geoserver.web.demo.MapPreviewPage', 'OSGeo')
-];
-
-const getMonitors = async () => {
-    return monitorsList;
-}
-
-getMonitors().then(monitorsList => {
-    Promise.all(serverList.map(s =>
-            fetch(s.url)
-            .then(resp => resp.text())
-            .then(data => getServices(data, s.typ))
-        ))
-        .then(texts => {
-            let allServices = texts.flat().concat(regServices);
-
-            let u1 = '<a title="stats" href="https://stats.uptimerobot.com/nNwk9IGgjk/$">';
-            let u2 = '</a>';
-
-            let smiley = {
-                0: '<span class="hidden">7</span>', //empty
-                1: '<span class="hidden">5</span><i class="fas fa-circle" style="color:lightgrey;"></i>', //grey
-                2: '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>', //OK
-                3: '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>', //slow
-                4: '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>', //down
-                5: '<span class="hidden">6</span><i class="fas fa-question-circle" style="color:grey;"></i>' //possible
-            };
-
-            //console.log('allServices', allServices);
-
-            let WMSList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('wms'));
-            let RESTList = monitorsList.map(a => a.url.toLowerCase()).filter(b => b.includes('/rest/'));
-
-            let queryLink = '';
-
-            let wfsServices = ['GBA_Pangeo_Ground_Stability (projekte_pangeo)', '1GE_GBA_500k_Surface_Geology (projekte_onegeology)', 'TEST_WFS_IRIS_Lagerstaetten_Reviere (test)'];
-            let serverTyp = ['MapServer', 'ImageServer', 'FeatureServer'];
-
-            let responseTime = '';
-            let uptime = '';
-            let restBonus = 0;
-            let lookUpID = '';
-
-            for (let i of allServices) {
-
-                let lookUp = monitorsList.filter(s => s.url.includes(i.url.replace('/ows', ''))).concat(monitorsList.filter(s => s.url.includes(i.url.replace('/rest/', '/'))));
-
-                //console.log('lookUp', lookUp);
-                monitorLink = '-';
-                addStatus = 1;
-                restBonus = 0;
-                responseTime = '-';
-                uptime = '-';
-                lookUpID = '-';
-
-
-                if (lookUp.length > 0) {
-                    responseTime = parseInt(lookUp[0].average_response_time);
-                    uptime = parseFloat(lookUp[0].all_time_uptime_ratio).toFixed(2);
-                    monitorLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${lookUp[0].id}"><i class="fas fa-poll"></i></a>`;
-                    lookUpID = `<a title="view" href="${lookUp[0].url}"><i class="far fa-eye"></i></a>`;
-
-                    switch (lookUp[0].status) {
-                        case 2:
-                            if (responseTime < 2000 && uptime > 99) {
-                                addStatus = 2;
-                            } else {
-                                addStatus = 3;
-                            }
-                            break;
-                        case 0:
-                            addStatus = 5;
-                            break;
-                        case 8:
-                            addStatus = 4;
-                            break;
-                        case 9:
-                            addStatus = 4;
-                            break;
-                    }
-                } else if (serverTyp.includes(i.typ)) {
-                    i.wms = 5;
-                }
-
-                if (wfsServices.includes(i.name)) {
-                    i.wfs = 1;
-                }
-                if (WMSList.filter(a => a.includes(i.url.replace('/rest/', '/').toLowerCase())).length > 0) {
-                    i.wms = 1;
-                }
-                if (RESTList.filter(a => a.includes(i.url.toLowerCase())).length > 0) {
-                    i.rest = 1;
-                }
-                if (i.wms == 1 && i.rest == 1 && addStatus == 3 && responseTime < 2500) {
-                    restBonus = 1;
-                }
-
-                $('#monitors').append(`<tr>
-                                <td><a title="link" href="${i.url}"><i class="fas fa-link"></i></a>&nbsp;&nbsp;&nbsp;${i.name}</td>
-                                <td>${i.typ}</td>
-                                <td>${i.server}</td>
-                                <td class="middle">${((i.rest==5)?smiley[5]:smiley[i.rest * addStatus - restBonus])}</td>
-                                <td class="middle">${((i.wms==5)?smiley[5]:smiley[i.wms * addStatus])}</td>
-                                <td class="middle">${((i.wfs==5)?smiley[5]:smiley[i.wfs * addStatus])}</td>
-                                <td class="middle">${((i.csw==5)?smiley[5]:smiley[i.csw * addStatus])}</td>
-                                <td class="middle">${((i.rdf==5)?smiley[5]:smiley[i.rdf * addStatus])}</td>
-                                <td class="middle">${((i.oai==5)?smiley[5]:smiley[i.oai * addStatus])}</td>
-                                <td class="middle">${monitorLink}</td>
-                                <td class="middle">${lookUpID}</td>
-                                <td class="number">${uptime}</td>
-                                <td class="number">${responseTime}</td>
-                            </tr>`);
-            }
-
-
-            //monitorLink = `<a title="test" href="${lookUp[0].url}"><i class="fab fa-creative-commons-sampling"></i></a>`;
-
-            //https://datatables.net/examples/basic_init/
-
-            $('#example').DataTable({
-                "order": [
-                    [1, "asc"]
-                ], //nach Namen sortiert
-                //"paging": false
-                "lengthMenu": [25, 50, 100]
-            });
-            $('#loading').hide();
-
-            $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
-            $('#example_filter').parent().parent().append(`
-                            <div class="col-sm-12 col-md-4">
-                                uptime status:
-                                <br>
-                                <span class="legend">
-                                ${smiley[2]} OK&nbsp;&nbsp;&nbsp;
-                                ${smiley[3]} slow (>2s)&nbsp;&nbsp;&nbsp;
-                                ${smiley[4]} down&nbsp;&nbsp;
-                                ${smiley[1]} unknown&nbsp;
-                                ${smiley[5]} relevant&nbsp;
-                                </span>
-                            </div>`);
-
-
+document.addEventListener("DOMContentLoaded", function (event) {
+    Promise.all([getMonitors(), getGsLayer(), getArcGisLayer()]) //get external resources
+        .then((val) => {
+            console.log(val);
+            addArcGisServices(val[2]);
+            addGsServices(val[1]);
+            createHTML(val[0]);
         });
 });
 
-async function postData(url = '', data = {}) {
-    // Default options are marked with *
-    const response = await fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        credentials: 'same-origin', // include, *same-origin, omit
-        headers: {
-            'Content-Type': 'application/json'
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        redirect: 'follow', // manual, *follow, error
-        referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-    return response.json(); // parses JSON response into native JavaScript objects
+function createHTML(monitorArr) {
+
+    for (let i of regServices) {
+        let m = monitorArr.find(a => a.url.indexOf(i.urlPart) > -1);
+        let all_time_uptime_ratio = 0;
+        let average_response_time = 0;
+        let uptimeLink = '-';
+        let viewLink = '-';
+        let status = 0;
+        let slow = 0;
+
+        if (m !== undefined) {
+            all_time_uptime_ratio = parseFloat(m.all_time_uptime_ratio).toFixed(2);
+            average_response_time = parseInt(m.average_response_time);
+            uptimeLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${m.id}">
+                            <i class="fas fa-poll"></i>
+                          </a>`;
+            viewLink = `<a title="view" href="${m.url}">
+                            <i class="far fa-eye"></i>
+                        </a>`;
+            status = m.status;
+            if (average_response_time > 2000 || all_time_uptime_ratio < 98) {
+                slow = 1;
+            }
+        }
+        //console.log(i, status, slow);
+
+        $('#monitors').append(`<tr>
+        <td><a title="link" href="${i.url}">
+                <i class="fas fa-link"></i>
+            </a>&nbsp;&nbsp;&nbsp;${i.name}
+        </td>
+        <td>${i.typ}</td>
+        <td>${i.server}</td>
+        <td class="middle">${getSmiley(i.rest, status, slow)}</td>
+        <td class="middle">${getSmiley(i.wms, status, slow)}</td>
+        <td class="middle">${getSmiley(i.wfs, status, slow)}</td>
+        <td class="middle">${getSmiley(i.csw, status, slow)}</td>
+        <td class="middle">${getSmiley(i.rdf, status, slow)}</td>
+        <td class="middle">${getSmiley(i.oai, status, slow)}</td>
+        <td class="middle">${uptimeLink}</td>
+        <td class="middle">${viewLink}</td>
+        <td class="number">${all_time_uptime_ratio}</td>
+        <td class="number">${average_response_time}</td>
+        </tr>`);
+
+    }
+
+}
+
+function getSmiley(s, status, slow) {
+    if (s > 0) {
+        s += status + slow;
+    }
+
+    switch (s) {
+        case 0: //not available
+            return '<span class="hidden">5</span>';
+            break;
+        case 1: //possible
+            return '<span class="hidden">1</span><i class="fas fa-circle" style="color:lightgrey;"></i>';
+            break;
+        case 3: //ok
+            return '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>';
+            break;
+        case 4: //slow
+            return '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>';
+            break;
+        case 10: //down
+            return '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
+            break;
+        default: //not available
+            return '<span class="hidden">10</span>';
+    }
+}
+
+function addArcGisServices(s) {
+    for (c of s) {
+        let cs = c.split('/');
+        let wfs = 0;
+        let check = c.split('services/')[1];
+        if (cs[cs.length - 1] == 'FeatureServer') {
+            wfs = 1;
+        }
+        if (cs.length > 8) {
+            regServices.push(new Service(cs[7] + ' (' + cs[6] + ')', cs[8], c, 'ArcGIS', 1, 1, wfs, 0, 0, 0, check));
+        } else {
+            regServices.push(new Service(cs[6], cs[7], c, 'ArcGIS', 1, 1, wfs, 0, 0, 0, check));
+        }
+    }
+}
+
+function addGsServices(s) {
+    for (c of s) {
+        let check = c.url.split('layers=')[1].split('&')[0];
+        regServices.push(new Service(c.title, 'Geoserver', c.url, 'OSGeo', 1, 1, 1, 0, 0, 0, check));
+    }
+    //console.log(regServices);
+}
+
+function getMonitors() { //get uptime stats
+    return fetch('https://resource.geolba.net/webservices/getMonitors.php')
+        .then(res => res.text())
+        .then(data => {
+            return (data.split('|').map(a => JSON.parse(a).monitors).flat());
+        });
+}
+
+function getGsLayer() { //get all Geoserver layers
+    return fetch('https://resource.geolba.net/webservices/gsLayer.php')
+        .then(res => res.json())
+        .then(data => {
+            return (data);
+        });
+}
+
+function getArcGisLayer() { //get all ArcGIS services
+    return fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
+        .then(res => res.text())
+        .then(data => {
+            let urlArr = data.split('<loc>').map(a => a.split('</loc>')[0]);
+            urlArr.shift();
+            return (urlArr);
+        });
 }
