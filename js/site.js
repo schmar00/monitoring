@@ -40,6 +40,8 @@ let regServices = [ //
     new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
 ];
 
+let otherIDs = [];
+
 document.addEventListener("DOMContentLoaded", function (event) {
     fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
         .then(res => res.text())
@@ -49,11 +51,36 @@ document.addEventListener("DOMContentLoaded", function (event) {
             addArcGisServices(urlArr);
             addGsServices(gsLayer);
             //console.log(uptimeArr);
-            createHTML(uptimeArr.map(a => a.monitors).flat());
+            let monitorArr = uptimeArr.map(a => a.monitors).flat();
+            createRow(monitorArr);
+            //console.log(otherIDs);
+            addWebsites(monitorArr);
+
+            $('#example').DataTable({
+                "order": [
+                    [1, "asc"]
+                ], //nach Namen sortiert
+                //"paging": false
+                "lengthMenu": [25, 50, 100]
+            });
+            $('#loading').hide();
+
+            $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
+            $('#example_filter').parent().parent().append(`
+                            <div class="col-sm-12 col-md-4">
+                                uptime status:
+                                <br>
+                                <span class="legend">
+                                ${getSmiley(1, 2, false)} OK&nbsp;&nbsp;&nbsp;
+                                ${getSmiley(1, 3, false)} variable&nbsp;&nbsp;&nbsp;
+                                ${getSmiley(1, 9, false)} down&nbsp;&nbsp;
+                                ${getSmiley(1, 0, false)} not monitored&nbsp;
+                                </span>
+                            </div>`);
         });
 });
 
-function createHTML(monitorArr) {
+function createRow(monitorArr) {
 
     for (let i of regServices) {
         let m = monitorArr.find(a => a.url.indexOf(i.urlPart) > -1);
@@ -77,29 +104,65 @@ function createHTML(monitorArr) {
             if (average_response_time > 2000 || all_time_uptime_ratio < 98) {
                 slow = 1;
             }
+            otherIDs.push(m.id);
         }
         //console.log(i, status, slow);
 
         $('#monitors').append(`<tr>
-        <td><a title="link" href="${i.url}">
-                <i class="fas fa-link"></i>
-            </a>&nbsp;&nbsp;&nbsp;${i.name}
-        </td>
-        <td>${i.typ}</td>
-        <td>${i.server}</td>
-        <td class="middle">${getSmiley(i.rest, status, slow)}</td>
-        <td class="middle">${getSmiley(i.wms, status, slow)}</td>
-        <td class="middle">${getSmiley(i.wfs, status, slow)}</td>
-        <td class="middle">${getSmiley(i.csw, status, slow)}</td>
-        <td class="middle">${getSmiley(i.rdf, status, slow)}</td>
-        <td class="middle">${getSmiley(i.oai, status, slow)}</td>
-        <td class="middle">${uptimeLink}</td>
-        <td class="middle">${viewLink}</td>
-        <td class="number">${all_time_uptime_ratio}</td>
-        <td class="number">${average_response_time}</td>
-        </tr>`);
+                                <td><a title="link" href="${i.url}">
+                                        <i class="fas fa-link"></i>
+                                    </a>&nbsp;&nbsp;&nbsp;${i.name}
+                                </td>
+                                <td>${i.typ}</td>
+                                <td>${i.server}</td>
+                                <td class="middle">${getSmiley(i.rest, status, slow)}</td>
+                                <td class="middle">${getSmiley(i.wms, status, slow)}</td>
+                                <td class="middle">${getSmiley(i.wfs, status, slow)}</td>
+                                <td class="middle">${getSmiley(i.csw, status, slow)}</td>
+                                <td class="middle">${getSmiley(i.rdf, status, slow)}</td>
+                                <td class="middle">${getSmiley(i.oai, status, slow)}</td>
+                                <td class="middle">${uptimeLink}</td>
+                                <td class="middle">${viewLink}</td>
+                                <td class="number">${all_time_uptime_ratio}</td>
+                                <td class="number">${average_response_time}</td>
+                                </tr>`);
     }
 }
+
+function addHTML() {
+
+}
+
+function addWebsites(monitorArr) {
+    let eC = `<td class="middle"><span class="hidden">5</span></td>`;
+    for (let i of monitorArr) {
+        if (!otherIDs.includes(i.id)) {
+            $('#monitors').append(`<tr>
+                                    <td><a title="link" href="${i.url}">
+                                            <i class="fas fa-link"></i>
+                                        </a>&nbsp;&nbsp;&nbsp;${i.friendly_name}
+                                    </td>
+                                    <td>other</td>
+                                    <td>HTTP</td>
+                                    ${eC}${eC}${eC}${eC}${eC}${eC}
+                                    <td class="middle">
+                                        <a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${i.id}">
+                                            <i class="fas fa-poll"></i>
+                                        </a>
+                                    </td>
+                                    <td class="middle">
+                                        <a title="view" href="${i.url}">
+                                            <i class="far fa-eye"></i>
+                                        </a>
+                                    </td>
+                                    <td class="number">${parseFloat(i.all_time_uptime_ratio).toFixed(2)}</td>
+                                    <td class="number">${parseInt(i.average_response_time)}</td>
+                                    </tr>`);
+        }
+    }
+}
+
+
 
 function getSmiley(s, status, slow) {
     if (s > 0) {
@@ -111,19 +174,19 @@ function getSmiley(s, status, slow) {
             return '<span class="hidden">5</span>';
             break;
         case 1: //possible
-            return '<span class="hidden">1</span><i class="fas fa-circle" style="color:lightgrey;"></i>';
+            return '<span class="hidden">4</span><i class="fas fa-circle" style="color:lightgrey;"></i>';
             break;
         case 3: //ok
-            return '<span class="hidden">2</span><i class="fas fa-smile" style="color:#27ae60;"></i>';
+            return '<span class="hidden">1</span><i class="fas fa-smile" style="color:#27ae60;"></i>';
             break;
         case 4: //slow
-            return '<span class="hidden">3</span><i class="fas fa-meh" style="color:#FFC300;"></i>';
+            return '<span class="hidden">2</span><i class="fas fa-meh" style="color:#FFC300;"></i>';
             break;
         case 10: //down
-            return '<span class="hidden">4</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
+            return '<span class="hidden">3</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
             break;
         default: //not available
-            return '<span class="hidden">10</span>';
+            return '<span class="hidden">5</span>';
     }
 }
 
