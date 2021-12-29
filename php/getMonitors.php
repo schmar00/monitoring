@@ -1,4 +1,5 @@
 <?php
+header("Access-Control-Allow-Origin: *"); #enable cors
 $curl = curl_init();
 
 $offset = "&offset=50";
@@ -25,8 +26,8 @@ $response1 = curl_exec($curl);
 $curlopt[CURLOPT_POSTFIELDS] = $page2;
 curl_setopt_array($curl, $curlopt);
 $response2 = curl_exec($curl);
-#echo ($response1 . '|' . $response2);
-$file_pointer = 'getMonitors.js';
-file_put_contents($file_pointer, ('const uptimeArr = ['.$response1.','.$response2.'];'));
+echo ($response1 . '|' . $response2);
+#$file_pointer = 'getMonitors.js';
+#file_put_contents($file_pointer, ('const uptimeArr = ['.$response1.','.$response2.'];'));
 curl_close($curl);
 ?>

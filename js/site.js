@@ -1,5 +1,3 @@
-/* fetch('https://resource.geolba.net/webservices/getMonitors.php');
-fetch('https://resource.geolba.net/webservices/gsLayer.js'); */
 
 class Service {
     constructor(name, typ, url, server, rest, wms, wfs, csw, rdf, oai, urlPart) { // Constructor
@@ -43,42 +41,40 @@ let regServices = [ //
 let otherIDs = [];
 
 document.addEventListener("DOMContentLoaded", function (event) {
-    fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
-        .then(res => res.text())
-        .then(data => {
-            let urlArr = data.split('<loc>').map(a => a.split('</loc>')[0]);
-            urlArr.shift();
-            addArcGisServices(urlArr);
-            addGsServices(gsLayer);
-            //console.log(uptimeArr);
-            let monitorArr = uptimeArr.map(a => a.monitors).flat();
-            createRow(monitorArr);
-            //console.log(otherIDs);
-            addWebsites(monitorArr);
-
-            $('#example').DataTable({
-                "order": [
-                    [1, "asc"]
-                ], //nach Namen sortiert
-                //"paging": false
-                "lengthMenu": [25, 50, 100]
-            });
-            $('#loading').hide();
-
-            $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
-            $('#example_filter').parent().parent().append(`
-                            <div class="col-sm-12 col-md-4">
-                                uptime status:
-                                <br>
-                                <span class="legend">
-                                ${getSmiley(1, 2, false)} OK&nbsp;&nbsp;&nbsp;
-                                ${getSmiley(1, 3, false)} variable&nbsp;&nbsp;&nbsp;
-                                ${getSmiley(1, 9, false)} down&nbsp;&nbsp;
-                                ${getSmiley(1, 0, false)} not monitored&nbsp;
-                                </span>
-                            </div>`);
+    Promise.all([getMonitors(), getGsLayers(), getArcGisLayers()]) //get external resources
+        .then((val) => {
+            //console.log(val);
+            addArcGisServices(val[2]);
+            addGsServices(val[1]);
+            createRow(val[0]);
+            addWebsites(val[0]);
+            addHeader();
         });
 });
+
+function addHeader() {
+    $('#example').DataTable({
+        "order": [
+            [1, "asc"]
+        ], //nach Namen sortiert
+        //"paging": false
+        "lengthMenu": [25, 50, 100]
+    });
+    $('#loading').hide();
+
+    $('.col-md-6').addClass('col-md-4').removeClass('col-md-6');
+    $('#example_filter').parent().parent()
+        .append(`<div class="col-sm-12 col-md-4">
+                uptime status:
+                <br>
+                <span class="legend">
+                 ${getSmiley(1, 2, false)} OK&nbsp;&nbsp;&nbsp;
+                 ${getSmiley(1, 3, false)} variable&nbsp;&nbsp;&nbsp;
+                 ${getSmiley(1, 9, false)} down&nbsp;&nbsp;
+                 ${getSmiley(1, 0, false)} not monitored&nbsp;
+                </span>
+            </div>`);
+}
 
 function createRow(monitorArr) {
 
@@ -127,10 +123,6 @@ function createRow(monitorArr) {
                                 <td class="number">${average_response_time}</td>
                                 </tr>`);
     }
-}
-
-function addHTML() {
-
 }
 
 function addWebsites(monitorArr) {
@@ -213,4 +205,30 @@ function addGsServices(s) {
         regServices.push(new Service(c.title, 'Geoserver', c.url, 'OSGeo', 1, 1, 1, 0, 0, 0, check));
     }
     //console.log(regServices);
+}
+
+function getMonitors() { //get uptime stats
+    return fetch('https://resource.geolba.net/webservices/getMonitors.php')
+        .then(res => res.text())
+        .then(data => {
+            return (data.split('|').map(a => JSON.parse(a).monitors).flat());
+        });
+}
+
+function getGsLayers() { //get all Geoserver layers
+    return fetch('https://resource.geolba.net/webservices/gsLayer.php')
+        .then(res => res.json())
+        .then(data => {
+            return (data);
+        });
+}
+
+function getArcGisLayers() { //get all ArcGIS services
+    return fetch('https://gisgba.geologie.ac.at/arcgis/rest/services/?f=sitemap')
+        .then(res => res.text())
+        .then(data => {
+            let urlArr = data.split('<loc>').map(a => a.split('</loc>')[0]);
+            urlArr.shift();
+            return (urlArr);
+        });
 }
