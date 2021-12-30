@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 function addHeader() {
     $('#example').DataTable({
         "order": [
-            [1, "asc"]
+            [4, "asc"]
         ], //nach Namen sortiert
         //"paging": false
         "lengthMenu": [25, 50, 100]
@@ -80,8 +80,8 @@ function createRow(monitorArr) {
 
     for (let i of regServices) {
         let m = monitorArr.find(a => a.url.indexOf(i.urlPart) > -1);
-        let all_time_uptime_ratio = 0;
-        let average_response_time = 0;
+        let all_time_uptime_ratio = '-';
+        let average_response_time = '-';
         let uptimeLink = '-';
         let viewLink = '-';
         let status = 0;
@@ -176,7 +176,7 @@ function getSmiley(s, status, slow) {
             return '<span class="hidden">2</span><i class="fas fa-meh" style="color:#FFC300;"></i>';
             break;
         case 9: //down
-            return '<span class="hidden">3</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
+            return '<span class="hidden">0</span><i class="fas fa-frown" style="color:#e74c3c;"></i>'
             break;
         default: //not available
             return '<span class="hidden">5</span>';
