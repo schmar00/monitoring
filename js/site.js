@@ -35,7 +35,7 @@ let regServices = [ //
     new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'ccca.ac.at'),
     new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'data.gv.at'),
     new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0, 'europeandataportal'),
-    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms', 'OSGeo', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
+    new Service('EGDI WMS (GEUS)', 'MapServer', 'https://data.geus.dk/egdi/wms/?layers=egdi_mineraloccurr_base_metals&service=WMS&version=1.1.1&format=image%2Fpng&width=1700&height=900&srs=epsg%3A4326&bbox=-40%2C40%2C40%2C80&request=GetMap', 'OSGeo', 1, 1, 0, 0, 0, 0, 'data.geus.dk/egdi')
 ];
 
 let otherIDs = [];
