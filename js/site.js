@@ -90,11 +90,17 @@ function createRow(monitorArr) {
         if (m !== undefined) {
             all_time_uptime_ratio = parseFloat(m.all_time_uptime_ratio).toFixed(2);
             average_response_time = parseInt(m.average_response_time);
+            let utStatusColor = '';
+            //console.log(m.friendly_name, m.status);
+            if (m.status==9){
+                utStatusColor = 'style="color:#e74c3c;"';
+            }
+
             uptimeLink = `<a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${m.id}">
-                            <i class="fas fa-poll"></i>
+                            <i class="fas fa-poll" ${utStatusColor}></i>
                           </a>`;
             viewLink = `<a title="view" href="${m.url}">
-                            <i class="far fa-eye"></i>
+                            <i class="far fa-eye" ${utStatusColor}></i>
                         </a>`;
             status = m.status;
             if (average_response_time > 2000 || all_time_uptime_ratio < 98) {
@@ -129,6 +135,13 @@ function addWebsites(monitorArr) {
     let eC = `<td class="middle"><span class="hidden">5</span></td>`;
     for (let i of monitorArr) {
         if (!otherIDs.includes(i.id)) {
+
+            let utStatusColor = '';
+            //console.log(m.friendly_name, m.status);
+            if (i.status==9){
+                utStatusColor = 'style="color:#e74c3c;"';
+            }
+
             $('#monitors').append(`<tr>
                                     <td><a title="link" href="${i.url}">
                                             <i class="fas fa-link"></i>
@@ -139,12 +152,12 @@ function addWebsites(monitorArr) {
                                     ${eC}${eC}${eC}${eC}${eC}${eC}
                                     <td class="middle">
                                         <a title="statistics" href="https://stats.uptimerobot.com/nNwk9IGgjk/${i.id}">
-                                            <i class="fas fa-poll"></i>
+                                            <i class="fas fa-poll" ${utStatusColor}></i>
                                         </a>
                                     </td>
                                     <td class="middle">
                                         <a title="view" href="${i.url}">
-                                            <i class="far fa-eye"></i>
+                                            <i class="far fa-eye" ${utStatusColor}></i>
                                         </a>
                                     </td>
                                     <td class="number">${parseFloat(i.all_time_uptime_ratio).toFixed(2)}</td>
