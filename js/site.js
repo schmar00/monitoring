@@ -31,7 +31,7 @@ let regServices = [ //
     new Service('EGDI Catalog', 'Catalog', 'https://egdi.geology.cz', 'Micka', 1, 0, 0, 1, 1, 1, 'egdi.geology.cz'),
     new Service('LRFZ Catalog', 'Catalog', 'https://geometadaten.lfrz.at/at.lfrz.discoveryservices/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1, 'lfrz.at'),
     new Service('INSPIRE Catalog', 'Catalog', 'https://inspire-geoportal.ec.europa.eu', 'OSGeo', 1, 0, 0, 1, 0, 1, 'inspire-geoportal.ec'),
-    new Service('BEV Catalog', 'Catalog', 'http://sd.bev.gv.at/geonetwork/srv/ger/', 'OSGeo', 1, 0, 0, 1, 1, 1, 'bev.gv.at/geonetwork'),
+    new Service('BEV Catalog', 'Catalog', 'https://data.bev.gv.at/geonetwork/srv/eng/', 'OSGeo', 1, 0, 0, 1, 1, 1, 'bev.gv.at/geonetwork'),
     new Service('CCCA Catalog', 'Catalog', 'https://data.ccca.ac.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'ccca.ac.at'),
     new Service('OGD Catalog', 'Catalog', 'https://www.data.gv.at', 'CKAN', 1, 0, 0, 1, 1, 0, 'data.gv.at'),
     new Service('European Data Portal', 'Catalog', 'https://www.europeandataportal.eu', 'Virtuoso', 1, 0, 0, 0, 1, 0, 'europeandataportal'),
